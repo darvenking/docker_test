@@ -14,6 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
@@ -27,17 +30,15 @@ jobs:
           VERSION=v${{ github.run_number }}
           echo "version_tag=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build and push image
-        run: |
-          IMAGE=ghcr.io/${{ github.repository }}/docker-app
-
-          # 构建镜像（两个 tag: latest 和 vX）
-          docker build . \
-            -t $IMAGE:latest \
-            -t $IMAGE:${{ steps.vars.outputs.version_tag }}
-
-          # 推送两个 tag
-          docker push $IMAGE:latest
-          docker push $IMAGE:${{ steps.vars.outputs.version_tag }}
-
-          echo "Published: latest and $IMAGE:${{ steps.vars.outputs.version_tag }}"
+      - name: Build and Push (with cache)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/docker-app:latest
+            ghcr.io/${{ github.repository }}/docker-app:${{ steps.vars.outputs.version_tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
