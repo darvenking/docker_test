@@ -19,6 +19,10 @@ var (
 			sail.GetLogger().Info("pong")
 			c.String(http.StatusOK, "pong")
 		})
+		ginEngine.GET("/", func(c *gin.Context) {
+			sail.GetLogger().Info("pong")
+			c.String(http.StatusOK, "your ip is %s", c.ClientIP())
+		})
 	}
 )
 
