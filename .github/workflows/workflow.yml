@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write    # 关键权限
+      packages: write
 
     steps:
       - uses: actions/checkout@v4
@@ -19,10 +19,25 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}   # 自动有，不用手动建
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Set image tag
+        id: vars
+        run: |
+          VERSION=v${{ github.run_number }}
+          echo "version_tag=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build and push image
         run: |
           IMAGE=ghcr.io/${{ github.repository }}/docker-app
-          docker build . -t $IMAGE:latest
+
+          # 构建镜像（两个 tag: latest 和 vX）
+          docker build . \
+            -t $IMAGE:latest \
+            -t $IMAGE:${{ steps.vars.outputs.version_tag }}
+
+          # 推送两个 tag
           docker push $IMAGE:latest
+          docker push $IMAGE:${{ steps.vars.outputs.version_tag }}
+
+          echo "Published: latest and $IMAGE:${{ steps.vars.outputs.version_tag }}"
