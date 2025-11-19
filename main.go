@@ -1,39 +1,15 @@
 package main
 
 import (
-	"net/http"
 	"os"
-	"time"
+	"sail/router"
 
-	"github.com/gin-gonic/gin"
 	"github.com/keepchen/go-sail/v3/sail"
 	"github.com/keepchen/go-sail/v3/sail/config"
 )
 
-var (
-	registerRoutes = func(ginEngine *gin.Engine) {
-		ginEngine.GET("/hello", func(c *gin.Context) {
-			sail.GetLogger().Sugar().Infof("hello %s", c.Request.URL.Path)
-			c.String(http.StatusOK, "%s", "hello, world!")
-		})
-		ginEngine.GET("/ping", func(c *gin.Context) {
-			sail.GetLogger().Info("pong")
-			c.String(http.StatusOK, "pong")
-		})
-		ginEngine.GET("/", func(c *gin.Context) {
-			sail.GetLogger().Info("pong")
-			c.String(http.StatusOK, "your ip is %s", c.ClientIP())
-		})
-		ginEngine.GET("/time", func(c *gin.Context) {
-			sail.GetLogger().Info("pong")
-			c.String(http.StatusOK, "current time is %s", time.Now().Format(time.RFC3339))
-		})
-	}
-)
-
 func main() {
-
 	configBytes, _ := os.ReadFile("config.yaml")
 	conf, _ := config.ParseConfigFromBytes("yaml", configBytes)
-	sail.WakeupHttp("go-sail1", conf).Hook(registerRoutes, nil, nil).Launch()
+	sail.WakeupHttp("go-sail1", conf).Hook(router.RegisterRoutes, nil, nil).Launch()
 }
