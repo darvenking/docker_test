@@ -1,0 +1,194 @@
+http_conf:
+  debug: true
+  addr: "0.0.0.0:8888"
+  swagger_conf:
+    enable: false
+    redoc_ui_path: ""
+    json_path: ""
+    favicon_path: ""
+  prometheus_conf:
+    enable: false
+    addr: ""
+    access_path: ""
+    disable_system_sample: false
+    disk_path: ""
+    sample_interval: ""
+  websocket_route_path: ""
+logger_conf:
+  console_output: true
+  env: ""
+  level: "debug"
+  modules: ["123"]
+  filename: "logs/running.log"
+  max_size: 0
+  max_backups: 0
+  compress: false
+  exporter:
+    provider: ""
+    redis:
+      list_key: ""
+      conn_conf:
+        endpoint:
+          host: ""
+          port: 0
+          username: ""
+          password: ""
+        enable: false
+        database: 0
+        ssl_enable: false
+      cluster_conn_conf:
+        enable: false
+        ssl_enable: false
+        endpoints: []
+    nats:
+      subject: ""
+      conn_conf:
+        enable: false
+        endpoints: []
+        username: ""
+        password: ""
+    kafka:
+      topic: ""
+      conn_conf:
+        enable: false
+        endpoints: []
+        SASLAuthType: ""
+        username: ""
+        password: ""
+        timeout: 0
+db_conf:
+  enable: false
+  driver_name: ""
+  auto_migrate: false
+  disable_foreign_key_constraint_when_migrating: false
+  disable_nested_transaction: false
+  allow_global_update: false
+  skip_default_transaction: false
+  logger:
+    level: ""
+    slow_threshold: 0
+    skip_caller_lookup: false
+    ignore_record_not_found_error: false
+    colorful: false
+  connection_pool:
+    max_open_conn_count: 0
+    max_idle_conn_count: 0
+    conn_max_life_time_minutes: 0
+    conn_max_idle_time_minutes: 0
+  mysql:
+    read:
+      host: ""
+      port: 0
+      username: ""
+      password: ""
+      database: ""
+      charset: ""
+      parseTime: false
+      loc: ""
+    write:
+      host: ""
+      port: 0
+      username: ""
+      password: ""
+      database: ""
+      charset: ""
+      parseTime: false
+      loc: ""
+  postgres:
+    read:
+      host: ""
+      port: 0
+      username: ""
+      password: ""
+      database: ""
+      ssl_mode: ""
+      timezone: ""
+    write:
+      host: ""
+      port: 0
+      username: ""
+      password: ""
+      database: ""
+      ssl_mode: ""
+      timezone: ""
+  sqlserver:
+    read:
+      host: ""
+      port: 0
+      username: ""
+      password: ""
+      database: ""
+    write:
+      host: ""
+      port: 0
+      username: ""
+      password: ""
+      database: ""
+  sqlite:
+    read:
+      file: ""
+    write:
+      file: ""
+  clickhouse:
+    read:
+      host: ""
+      port: 0
+      username: ""
+      password: ""
+      database: ""
+      read_timeout: 0
+      write_timeout: 0
+    write:
+      host: ""
+      port: 0
+      username: ""
+      password: ""
+      database: ""
+      read_timeout: 0
+      write_timeout: 0
+redis_conf:
+  endpoint:
+    host: ""
+    port: 0
+    username: ""
+    password: ""
+  enable: false
+  database: 0
+  ssl_enable: false
+redis_cluster_conf:
+  enable: false
+  ssl_enable: false
+  endpoints: []
+nats_conf:
+  enable: false
+  endpoints: []
+  username: ""
+  password: ""
+jwt_conf: null
+email_conf:
+  workers: 0
+  worker_throttle_seconds: 0
+  host: ""
+  port: 0
+  username: ""
+  password: ""
+  from: ""
+  subject: ""
+  params:
+    variables: []
+kafka_conf:
+  conf:
+    enable: false
+    endpoints: []
+    SASLAuthType: ""
+    username: ""
+    password: ""
+    timeout: 0
+  topic: ""
+  groupID: ""
+etcd_conf:
+  enable: false
+  endpoints: []
+  username: ""
+  password: ""
+  timeout: 0
