@@ -14,6 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ★★★ 新增步骤 1：安装 QEMU 模拟器 ★★★
+      # 这是构建多架构镜像（Multi-Arch）的必要前提
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # 1. 启用 Docker Buildx (这是支持多架构和缓存的关键)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
@@ -21,23 +30,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set image tag
+      # 2. 准备变量：处理大小写问题 + 生成版本号
+      - name: Prepare Reg Name & Tags
         id: vars
         run: |
+          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           VERSION=v${{ github.run_number }}
+          echo "repo_lower=$REPO_LOWER" >> $GITHUB_OUTPUT
           echo "version_tag=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build and push image
-        run: |
-          IMAGE=ghcr.io/${{ github.repository }}/docker-app
-
-          # 构建镜像（两个 tag: latest 和 vX）
-          docker build . \
-            -t $IMAGE:latest \
-            -t $IMAGE:${{ steps.vars.outputs.version_tag }}
-
-          # 推送两个 tag
-          docker push $IMAGE:latest
-          docker push $IMAGE:${{ steps.vars.outputs.version_tag }}
-
-          echo "Published: latest and v${{ github.run_number }}"
+      # 3. 构建并推送 (核心步骤)
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          # ★★★ 修改步骤 2：指定多个架构，用逗号分隔 ★★★
+          # 插件会自动运行两次构建（一次传 amd64，一次传 arm64），然后合并成一个 Manifest 推送
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ steps.vars.outputs.repo_lower }}/docker-app:latest
+            ghcr.io/${{ steps.vars.outputs.repo_lower }}/docker-app:${{ steps.vars.outputs.version_tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
