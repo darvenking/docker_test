@@ -17,8 +17,8 @@ RUN apk add --no-cache ca-certificates-bundle tzdata \
 WORKDIR /root/
 COPY --from=builder /app/myapp .
 COPY config.yaml .
-EXPOSE 8080
+EXPOSE 8888
 
-HEALTHCHECK CMD wget --no-verbose --tries=1 --spider http://localhost:8080/ping || exit 1
+HEALTHCHECK CMD wget --no-verbose --tries=1 --spider http://localhost:8888/ping || exit 1
 
 CMD ["./myapp"]

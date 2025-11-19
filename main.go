@@ -15,6 +15,10 @@ var (
 			sail.GetLogger().Sugar().Infof("hello %s", c.Request.URL.Path)
 			c.String(http.StatusOK, "%s", "hello, world!")
 		})
+		ginEngine.GET("/ping", func(c *gin.Context) {
+			sail.GetLogger().Info("pong")
+			c.String(http.StatusOK, "pong")
+		})
 	}
 )
 
