@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/keepchen/go-sail/v3/sail"
@@ -22,6 +23,10 @@ var (
 		ginEngine.GET("/", func(c *gin.Context) {
 			sail.GetLogger().Info("pong")
 			c.String(http.StatusOK, "your ip is %s", c.ClientIP())
+		})
+		ginEngine.GET("/time", func(c *gin.Context) {
+			sail.GetLogger().Info("pong")
+			c.String(http.StatusOK, "current time is %s", time.Now().Format(time.RFC3339))
 		})
 	}
 )
