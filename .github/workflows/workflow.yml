@@ -40,4 +40,4 @@ jobs:
           docker push $IMAGE:latest
           docker push $IMAGE:${{ steps.vars.outputs.version_tag }}
 
-          echo "Published: latest and $IMAGE:${{ steps.vars.outputs.version_tag }}"
+          echo "Published: latest and v${{ github.run_number }}"
