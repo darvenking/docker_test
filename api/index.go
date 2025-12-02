@@ -19,7 +19,7 @@ func Ping(c *gin.Context) {
 }
 
 func Index(c *gin.Context) {
-	sail.GetLogger().Info("index")
+	sail.GetLogger().Info("index test")
 	c.String(http.StatusOK, "your ip is %s", c.ClientIP())
 }
 
