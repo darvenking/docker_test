@@ -43,7 +43,6 @@ Thumbs.db
 # Temporary files
 /tmp/
 /temp/
-go.sum
 
 sql
 script
